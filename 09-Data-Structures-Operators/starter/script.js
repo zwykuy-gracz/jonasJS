@@ -27,3 +27,11 @@ const restaurant = {
     },
   },
 };
+
+const orderPizza = function (base, ...others) {
+  console.log(base, ...others);
+  console.log(others);
+};
+
+orderPizza('a', 'b', 'c');
+const challenge = 0;
