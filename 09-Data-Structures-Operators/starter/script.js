@@ -33,5 +33,17 @@ const orderPizza = function (base, ...others) {
   console.log(others);
 };
 
-orderPizza('a', 'b', 'c');
-const challenge = 0;
+// orderPizza('a', 'b', 'c');
+// const challenge = 0;
+
+const airline = 'TAP Air Portugal';
+const plane = 'A320';
+// console.log(airline.slice(4, 9));
+// console.log(airline.slice(0, airline.indexOf(' ')));
+
+const checkMiddleSeat = function (seat) {
+  console.log(seat.slice(-1));
+};
+checkMiddleSeat('11B');
+checkMiddleSeat('23C');
+checkMiddleSeat('3E');
