@@ -76,7 +76,7 @@ const dogs = [5, 2, 4, 1, 15, 8, 3];
 const underAge = dogsAge => dogsAge * 2;
 const overAge = dogsAge => 16 + dogsAge * 2;
 
-const calcAverageHumanAge = function (dogsAge) {
+const calcAverageHumanAge2 = function (dogsAge) {
   const humanAges = dogsAge.map(dog =>
     dog <= 2 ? underAge(dog) : overAge(dog)
   );
@@ -84,11 +84,15 @@ const calcAverageHumanAge = function (dogsAge) {
     humanAges.reduce((acc, cur) => acc + cur, 0) / humanAges.length;
   return average;
 };
-console.log(calcAverageHumanAge(dogs));
 
-// const calcAverageHumanAge = dogs.map((dog, i) =>
-//   dog <= 2 ? underAge(dog) : overAge(dog)
-// );
+const calcAverageHumanAge = dogs =>
+  dogs.map(
+    dog =>
+      (dog <= 2 ? underAge(dog) : overAge(dog))
+        .filter(dog => dog > 18)
+        .reduce((acc, cur, i, arr) => acc + cur, 0) / arr.length
+  );
+console.log(calcAverageHumanAge(dogs));
 
 // const over18 = calcAverageHumanAge.filter(dogi => dogi > 18);
 
@@ -97,3 +101,10 @@ console.log(calcAverageHumanAge(dogs));
 //   calcAverageHumanAge.length;
 
 // console.log(average);
+
+const calcAverageHumanAge = dogs =>
+  dogs
+    .map(dog => (dog <= 2 ? underAge(dog) : overAge(dog)))
+    .filter(dog => dog > 18)
+    .reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
+console.log(calcAverageHumanAge(dogis));
