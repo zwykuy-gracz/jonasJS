@@ -108,3 +108,27 @@ const calcAverageHumanAge = dogs =>
     .filter(dog => dog > 18)
     .reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 console.log(calcAverageHumanAge(dogis));
+
+const anyDeposit = movements.some(mov => mov > 5);
+console.log(anyDeposit);
+
+const deposit = mov => mov > 0;
+console.log(movements.some(deposit));
+console.log(movements.every(deposit));
+console.log(movements.filter(deposit));
+
+// console.log(account4.movements.every(mov => mov > 0));
+
+const arr = [[1, 2, 3], [4, 5, 6], 7, 8];
+// console.log(arr.flat());
+
+const accountMovements = accounts.map(acc => acc.movements);
+console.log(accountMovements);
+const allMovements = accountMovements.flat();
+// const overalBalance = allMovements.reduce((acc, mov) => acc + mov, 0);
+
+const overalBalance = accounts
+  .map(acc => acc.movements)
+  .flat()
+  .reduce((acc, mov) => acc + mov, 0);
+console.log(overalBalance);
