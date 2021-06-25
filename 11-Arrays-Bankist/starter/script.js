@@ -216,18 +216,7 @@ btnClose.addEventListener('click', function (e) {
   inputCloseUsername.value = inputClosePin.value = '';
 });
 
-// console.log(account4.movements.every(mov => mov > 0));
+const owners = ['Jonas', 'Zach', 'Adam', 'Martha'];
+console.log(owners.sort);
 
-const arr = [[1, 2, 3], [4, 5, 6], 7, 8];
-// console.log(arr.flat());
-
-const accountMovements = accounts.map(acc => acc.movements);
-console.log(accountMovements);
-const allMovements = accountMovements.flat();
-// const overalBalance = allMovements.reduce((acc, mov) => acc + mov, 0);
-
-const overalBalance = accounts
-  .map(acc => acc.movements)
-  .flat()
-  .reduce((acc, mov) => acc + mov, 0);
-console.log(overalBalance);
+movements.sort((a, b) => {});
