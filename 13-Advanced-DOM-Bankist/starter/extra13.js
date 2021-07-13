@@ -39,3 +39,24 @@ document.querySelectorAll('.nav__link').forEach(function (el) {
 const h1 = document.querySelector('h1');
 console.log(h1.querySelectorAll('.highlight'));
 console.log(h1.childNodes);
+
+// window.addEventListener('scroll', function (e) {
+//   // console.log(window.scrollY);
+
+//   if (window.scrollY > initialCoords.top) nav.classList.add('sticky');
+//   else nav.classList.remove('sticky');
+// });
+
+// const obsCallback = function (entries, observer) {
+//   entries.forEach(entry => {
+//     console.log(entry);
+//   });
+// };
+
+// const obsOptions = {
+//   root: null,
+//   threshold: [0, 0.2],
+// };
+
+// const observer = new IntersectionObserver(obsCallback, obsOptions);
+// observer.observe(section1);
