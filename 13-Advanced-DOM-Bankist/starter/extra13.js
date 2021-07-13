@@ -35,3 +35,7 @@ document.querySelectorAll('.nav__link').forEach(function (el) {
       document.querySelector(id).scrollIntoView({ behavior: 'smooth' });
     });
   });
+
+const h1 = document.querySelector('h1');
+console.log(h1.querySelectorAll('.highlight'));
+console.log(h1.childNodes);
