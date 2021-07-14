@@ -60,3 +60,7 @@ console.log(h1.childNodes);
 
 // const observer = new IntersectionObserver(obsCallback, obsOptions);
 // observer.observe(section1);
+
+// const slider = document.querySelector('.slider');
+// slider.style.transform = 'scale(0.3) translateX(-1000px)';
+// slider.style.overflow = 'visible';
