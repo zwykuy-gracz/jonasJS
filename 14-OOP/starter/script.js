@@ -110,4 +110,45 @@ const PersonProto = {
 
 const steven = Object.create(PersonProto);
 steven.init('Steven', 2002);
-steven.calcAge();
+// steven.calcAge();
+
+class CarSpeed {
+  constructor(make, speed) {
+    this.make = make;
+    this.speed = speed;
+  }
+  accelerate() {
+    console.log(`'${this.make}' going at ${this.speed + 10}`);
+  }
+  brake() {
+    console.log(`'${this.make}' going at ${this.speed - 5}`);
+  }
+  get speedUS() {
+    return this.speed / 1.6;
+  }
+  set speedUS(speed) {
+    this.speed = speed * 1.6;
+  }
+}
+
+const car2 = new CarSpeed('Ford', 120);
+console.log(car2.speedUS);
+car2.accelerate();
+car2.accelerate();
+car2.brake();
+car2.speedUS = 50;
+console.log(car2);
+
+const Student = function (firstName, birthYear, course) {
+  Person.call(this, firstName, birthYear);
+  this.course = course;
+};
+
+Student.prototype = Object.create(Person.prototype);
+
+Student.prototype.introduce = function () {
+  console.log(`name: ${this.firstName} course: ${this.course}`);
+};
+const mike = new Student('Mike', 2010, 'Computers');
+mike.introduce();
+mike.calcAge();
