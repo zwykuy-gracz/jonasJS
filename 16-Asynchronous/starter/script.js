@@ -100,41 +100,48 @@ const getJSON = function (url, errorMsg = 'Something went wrong') {
   });
 };
 
-const getCountryData = function (country) {
-  getJSON(
-    `https://restcountries.eu/rest/v2/name/${country}`,
-    'Coutry not found'
-  )
-    .then(data => {
-      renderCountry(data[0]);
-      const neighbour = data[0].borders[0];
+// const getCountryData = function (country) {
+//   getJSON(
+//     `https://restcountries.eu/rest/v2/name/${country}`,
+//     'Coutry not found'
+//   )
+//     .then(data => {
+//       renderCountry(data[0]);
+//       const neighbour = data[0].borders[0];
 
-      if (!neighbour) throw new Error('No neighbour found!');
+//       if (!neighbour) throw new Error('No neighbour found!');
 
-      return getJSON(
-        `https://restcountries.eu/rest/v2/alpha/${neighbour}`,
-        'Coutry not found'
-      );
-    })
-    .then(data => renderCountry(data, 'neighbour'))
-    .catch(err => {
-      console.error(`${err}`);
-      renderError(`Something went wrong ${err.message}. Try again!`);
-    })
-    .finally(() => {
-      countriesContainer.style.opacity = 1;
-    });
-};
+//       return getJSON(
+//         `https://restcountries.eu/rest/v2/alpha/${neighbour}`,
+//         'Coutry not found'
+//       );
+//     })
+//     .then(data => renderCountry(data, 'neighbour'))
+//     .catch(err => {
+//       console.error(`${err}`);
+//       renderError(`Something went wrong ${err.message}. Try again!`);
+//     })
+//     .finally(() => {
+//       countriesContainer.style.opacity = 1;
+//     });
+// };
 
-btn.addEventListener('click', function () {
-  getCountryData('usa');
-});
+// btn.addEventListener('click', function () {
+//   getCountryData('usa');
+// });
 // getCountryData('australia');
 
 const whereAmI = function (lat, lng) {
   fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`)
-    .then(res => res.json())
+    .then(res => {
+      if (!res.ok) throw new Error(`problem with ${res.status}`);
+      console.log(res);
+      res.json();
+    })
     .then(data => {
       console.log(data);
-    });
+      console.log(`You are in ${data.city}, ${data.country}`);
+    })
+    .catch(err => console.error(`${err.message}`));
 };
+whereAmI(52.508, 13.381);
