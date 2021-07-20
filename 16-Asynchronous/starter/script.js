@@ -23,34 +23,118 @@ const renderCountry = function (data, className = '') {
     </article>
         `;
   countriesContainer.insertAdjacentHTML('beforeend', html);
-  countriesContainer.style.opacity = 1;
+  // countriesContainer.style.opacity = 1;
 };
 
-const getCountryandNeighbour = function (country) {
-  const request = new XMLHttpRequest();
-  request.open('GET', `https://restcountries.eu/rest/v2/name/${country}`);
-  request.send();
+const renderError = function (msg) {
+  countriesContainer.insertAdjacentText('beforeend', msg);
+  // countriesContainer.style.opacity = 1;
+};
 
-  request.addEventListener('load', function () {
-    const [data] = JSON.parse(this.responseText);
-    console.log(data);
+// const getCountryandNeighbour = function (country) {
+//   const request = new XMLHttpRequest();
+//   request.open('GET', `https://restcountries.eu/rest/v2/name/${country}`);
+//   request.send();
 
-    renderCountry(data);
+//   request.addEventListener('load', function () {
+//     const [data] = JSON.parse(this.responseText);
+//     console.log(data);
 
-    const [neighbour] = data.borders;
+//     renderCountry(data);
 
-    if (!neighbour) return;
+//     const [neighbour] = data.borders;
 
-    const request2 = new XMLHttpRequest();
-    request2.open('GET', `https://restcountries.eu/rest/v2/alpha/${neighbour}`);
-    request2.send();
+//     if (!neighbour) return;
 
-    request2.addEventListener('load', function () {
-      const data2 = JSON.parse(this.responseText);
+//     const request2 = new XMLHttpRequest();
+//     request2.open('GET', `https://restcountries.eu/rest/v2/alpha/${neighbour}`);
+//     request2.send();
 
-      renderCountry(data2, 'neighbour');
-    });
+//     request2.addEventListener('load', function () {
+//       const data2 = JSON.parse(this.responseText);
+
+//       renderCountry(data2, 'neighbour');
+//     });
+//   });
+// };
+
+// getCountryandNeighbour('usa');
+
+// const request = fetch(`https://restcountries.eu/rest/v2/name/${country}`);
+// console.log(request);
+
+// const getCountryData = function (country) {
+//   fetch(`https://restcountries.eu/rest/v2/name/${country}`)
+//     .then(response => {
+//       if (!response.ok)
+//         throw new Error(`Coutry not found (${response.status})`);
+//       return response.json();
+//     })
+//     .then(data => {
+//       renderCountry(data[0]);
+//       const neighbour = data[0].borders[0];
+
+//       if (!neighbour) return;
+
+//       return fetch(`https://restcountries.eu/rest/v2/alpha/${neighbour}`);
+//     })
+//     .then(response => response.json())
+//     .then(data => renderCountry(data, 'neighbour'))
+//     .catch(err => {
+//       console.error(`${err}`);
+//       renderError(`Something went wrong ${err.message}. Try again!`);
+//     })
+//     .finally(() => {
+//       countriesContainer.style.opacity = 1;
+//     });
+// };
+
+// btn.addEventListener('click', function () {
+//   getCountryData('germany');
+// });
+
+const getJSON = function (url, errorMsg = 'Something went wrong') {
+  return fetch(url).then(response => {
+    if (!response.ok) throw new Error(`${errorMsg} (${response.status})`);
+    return response.json();
   });
 };
 
-getCountryandNeighbour('usa');
+const getCountryData = function (country) {
+  getJSON(
+    `https://restcountries.eu/rest/v2/name/${country}`,
+    'Coutry not found'
+  )
+    .then(data => {
+      renderCountry(data[0]);
+      const neighbour = data[0].borders[0];
+
+      if (!neighbour) throw new Error('No neighbour found!');
+
+      return getJSON(
+        `https://restcountries.eu/rest/v2/alpha/${neighbour}`,
+        'Coutry not found'
+      );
+    })
+    .then(data => renderCountry(data, 'neighbour'))
+    .catch(err => {
+      console.error(`${err}`);
+      renderError(`Something went wrong ${err.message}. Try again!`);
+    })
+    .finally(() => {
+      countriesContainer.style.opacity = 1;
+    });
+};
+
+btn.addEventListener('click', function () {
+  getCountryData('usa');
+});
+// getCountryData('australia');
+
+const whereAmI = function (lat, lng) {
+  fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`)
+    .then(res => res.json())
+    .then(data => {
+      console.log(data);
+    });
+};
