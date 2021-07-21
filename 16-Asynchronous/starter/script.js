@@ -131,17 +131,146 @@ const getJSON = function (url, errorMsg = 'Something went wrong') {
 // });
 // getCountryData('australia');
 
-const whereAmI = function (lat, lng) {
-  fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`)
+// const whereAmI = function (lat, lng) {
+//   fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`)
+//     .then(res => {
+//       if (!res.ok) throw new Error(`problem with ${res.status}`);
+//       console.log(res);
+//       res.json();
+//     })
+//     .then(data => {
+//       console.log(data);
+//       console.log(`You are in ${data.city}, ${data.country}`);
+//     })
+//     .catch(err => console.error(`${err.message}`));
+// };
+// whereAmI(52.508, 13.381);
+
+// console.log('test start');
+// setTimeout(() => console.log('0 sec timer'), 0);
+// Promise.resolve('Resolved promise 1').then(res => console.log(res));
+
+// Promise.resolve('Resolved promise 2').then(res => {
+//   for (let i = 0; i < 10000000; i++) {}
+//   console.log(res);
+// });
+
+// console.log('test end');
+
+// const letteryPromise = new Promise(function (resolve, reject) {
+//   console.log('Lottery draw');
+//   setTimeout(function () {
+//     if (Math.random() >= 0.5) {
+//       resolve('You Win!');
+//     } else {
+//       reject(new Error('You lost!'));
+//     }
+//   }, 1000);
+// });
+
+// letteryPromise.then(res => console.log(res)).catch(err => console.log(err));
+
+// const wait = function (seconds) {
+//   return new Promise(function (resolve) {
+//     setTimeout(resolve, seconds * 1000);
+//   });
+// };
+
+// wait(2)
+//   .then(() => {
+//     console.log('I waited for 2 seconds');
+//     return wait(1);
+//   })
+//   .then(() => console.log('I waited for 1 second'));
+
+// Promise.resolve('abc').then(x => console.log(x));
+// Promise.reject(new Error('sdf')).catch(x => console.log(x));
+
+console.log('jpa');
+
+const getPosition = function () {
+  return new Promise(function (resolve, reject) {
+    // navigator.geolocation.getCurrentPosition(
+    //   position => resolve(position),
+    //   err => reject(err)
+    // );
+    navigator.geolocation.getCurrentPosition(resolve, reject);
+  });
+};
+
+// getPosition().then(pos => console.log('jjj', pos));
+
+const whereAmI = function () {
+  getPosition()
+    .then(pos => {
+      const { latitude: lat, longitude: lng } = pos.coords;
+
+      return fetch(`https://geocode.xyz/${lat},${lng}?geoit=json`);
+    })
     .then(res => {
-      if (!res.ok) throw new Error(`problem with ${res.status}`);
+      if (!res.ok) throw new Error(`problem with geocoding ${res.status}`);
       console.log(res);
       res.json();
     })
     .then(data => {
       console.log(data);
       console.log(`You are in ${data.city}, ${data.country}`);
+
+      return fetch(`https://restcountries.eu/rest/v2/name/${data.country}`);
     })
+    .then(res => {
+      if (!res.ok) throw new Error(`Country not found (${res.status})`);
+
+      return res.json();
+    })
+    .then(data => renderCountry(data[0]))
     .catch(err => console.error(`${err.message}`));
 };
-whereAmI(52.508, 13.381);
+
+btn.addEventListener('click', whereAmI);
+
+const wait = function (seconds) {
+  return new Promise(function (resolve) {
+    setTimeout(resolve, seconds * 1000);
+  });
+};
+
+const imgContainer = document.querySelector('.images');
+
+const createImage = function (imgPath) {
+  return new Promise(function (resolve, reject) {
+    const img = document.createElement('img');
+    img.src = imgPath;
+
+    img.addEventListener('load', function () {
+      imgContainer.append(img);
+      resolve(img);
+    });
+    img.addEventListener('error', function () {
+      reject(new Error('Image not found'));
+    });
+  });
+};
+
+let currentImg;
+
+createImage('img/img-1.jpg')
+  .then(img => {
+    currentImg = img;
+    console.log('image 1 loaded');
+    return wait(2);
+  })
+  .then(() => {
+    currentImg.style.display = 'none';
+    return createImage('img/img-2.jpg');
+  })
+  .then(img => {
+    currentImg = img;
+    console.log('image 2 loaded');
+    return wait(2);
+  })
+  .then(() => {
+    currentImg.style.display = 'none';
+    return createImage('img/img-3.jpg');
+  })
+  .catch(err => console.log(err));
